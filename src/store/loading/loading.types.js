@@ -1,0 +1,6 @@
+export const LOADING_ACTION_TYPES = {
+    LOADING_START: 'loading/LOADING_START',
+    LOADING_SUCCESS: 'loading/LOADING_SUCCESS',
+    LOADING_FAILED: 'loading/LOADING_FAILED',
+  };
+  
