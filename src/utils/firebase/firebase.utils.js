@@ -75,6 +75,43 @@ googleProvider.setCustomParameters({
 export const auth = getAuth();
 
 // =========================================================================================
+// 
+// =========================================================================================
+
+export const createConfirmacionDocument = async (confirmacion) => {
+  if (!confirmacion) return;
+
+  const confirmacionDocRef = doc(collection(db, "confirmaciones"));
+  
+  const {asistencia, numeroInvitados, nombreInvitado } = confirmacion;
+  const createdAt = new Date();
+  
+  try {
+      await setDoc(confirmacionDocRef, {
+      createdAt,
+      asistencia,
+      numeroInvitados,
+      nombreInvitado,
+      });
+  } catch (error) {
+      console.log('error creating the jugador', error.message);
+  }
+  const confirmacionSnapshot = await getDoc(confirmacionDocRef);
+
+  
+  return confirmacionSnapshot;
+}
+
+export const getConfirmacionesAndDocument = async () => {
+  const collectionRef = collection(db, 'confirmaciones');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => {
+    return {id: docSnapshot.id, ...docSnapshot.data()}
+  });
+}
+// =========================================================================================
 //
 // =========================================================================================
 
@@ -233,22 +270,6 @@ export const deleteUserDocument = async (idUser) => {
   return deleteUser;
 }
 
-// export const deleteUserAuth = async (email,password) => {
-//     // Need to create a second app to delete another user in Firebase auth list than the logged in one.
-//     // https://codeutlity.org/a/38013551/2012407
-//     // const secondaryApp = firebase.initializeApp(config, 'Secondary')
-//     // if (!user.email || !user.password) {
-//     //   return console.warn('Missing email or password to delete the user.')
-//     // }
-//     // await secondaryApp.auth().signInWithEmailAndPassword(user.email, user.password)
-//     //   .then(() => {
-//     //     const userInFirebaseAuth = secondaryApp.auth().currentUser
-//     //     userInFirebaseAuth.delete() // Delete the user in Firebase auth list (has to be logged in).
-//     //     secondaryApp.auth().signOut()
-//     //     secondaryApp.delete()
-//     //     // Then you can delete the user from the users collection if you have one.
-//     //   })
-// }
 
 export const updatePasswordUserAuth = async (newPassword) => {
   const user = auth.currentUser;

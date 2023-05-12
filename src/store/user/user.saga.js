@@ -40,6 +40,7 @@ import {
   loadingFailed
 } from '../loading/loading.action';
 
+import { selectCurrentUser } from './user.selector';
 
 
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
@@ -50,18 +51,6 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
       additionalDetails
     );
     yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
-    // if(!userSnapshot.arbitro){
-    //   const jugadorSnapshot = yield call(getJugadorAndDocument,userSnapshot.id);    
-    //   yield all([
-    //     put(getJugadorSuccess(jugadorSnapshot)),
-    //     put(getJugadoresByTeamStart(jugadorSnapshot.idEquipo)),
-    //     put(getTeamStart(jugadorSnapshot.idEquipo)),
-    //     put(getMatchesByTeamStart(jugadorSnapshot.idEquipo)),
-    //     // put(getTeamsStart()),
-    //     // put(getAllMatchesStart()),
-    //     // put(getJugadoresStart()),
-    //   ]);
-    // }
     yield put(loadingSuccess())
   } catch (error) {
     yield put(signInFailed(error));
@@ -87,20 +76,14 @@ export function* signInWithEmail({ payload: { email, password } }) {
       password
     );
     const userSnapshot = yield call(getSnapshotFromUserAuth, user);
-    // const currentUser = yield select(selectCurrentUser);
-    // const currentPlayer = yield select(selectJugador);
-    // const windowFlag = yield select(selectWindowFlag);
-  //   if(currentUser.id){
-  //     if(currentUser.admin){
-  //       History.navigate('/admin');
-  //     } else if (currentUser.arbitro){
-  //       History.navigate('/admin');
-  //     } else if (windowFlag.value === "Register" && currentPlayer.capitan){
-  //       History.navigate('/capitan');
-  //     } else {
-  //       History.navigate('/home');
-  //     }
-  //  }
+    const currentUser = yield select(selectCurrentUser);
+    if(currentUser.id){
+      if(currentUser.admin){
+        History.navigate('/admin');
+      } else {
+        History.navigate('/');
+      }
+   }
   } catch (error) {
     yield put(loadingFailed());
     yield put(signInFailed(error));
@@ -112,23 +95,10 @@ export function* isUserAuthenticated() {
     yield put(loadingStart());
     const userAuth = yield call(getCurrentUser);
     if (!userAuth) {
-      // if(window.location.pathname !== "/login/kpitan" && window.location.pathname !== "/login" && window.location.pathname !== "/stats_players"){
-      //   yield put(History.navigate('/'));
-      // }
       yield put(loadingSuccess());
       return;
     }
     yield call(getSnapshotFromUserAuth, userAuth);
-  //   const currentUser = yield select(selectCurrentUser);
-  //   const currentPlayer = yield select(selectJugador);
-  //   if(currentUser.id){
-  //     if((!currentUser.admin && window.location.pathname === "/admin") ||
-  //         (!currentUser.arbitro && window.location.pathname === "/admin" && !currentUser.admin)){
-  //       History.navigate('/');
-  //     } else if (!currentPlayer.capitan && window.location.pathname === "/capitan"){
-  //       History.navigate('/home');
-  //     }
-  //  }
     yield put(loadingSuccess());
   } catch (error) {
     yield put(loadingFailed());

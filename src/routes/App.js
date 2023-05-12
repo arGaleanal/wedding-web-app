@@ -19,11 +19,20 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import useMediaQuery from '@mui/material/useMediaQuery';
 import ThemeProvider from '../theme/ThemeProvider';
+import Loading from '../components/loading/loading.component';
 
-import ErrorPage from "./error-page";
+import ErrorPage from "../components/error-page";
 
-import Login from "./login/login.component";
-import Confirmacion from "./confirmacionForm/confirmacion.form.component";
+import SignInForm from "./login/login.component";
+import Confirmacion from "./confirmacion/confirmacion.component";
+import AdminLayout from './admin';
+import PanelInicio from './admin/inicio';
+import Confirmaciones from './admin/confirmaciones';
+import { getConfirmacionesStart } from '../store/confirmaciones/confirmacion.action';
+import { checkUserSession } from '../store/user/user.action';
+import {
+  loadingSuccess,
+} from '../store/loading/loading.action';
 
 // const router = createBrowserRouter([
 //   {
@@ -57,9 +66,11 @@ const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    // dispatch(loadingSuccess());
+    dispatch(loadingSuccess());
+    if(window.location.pathname !== "/recover_password"){
+      dispatch(checkUserSession());
+    }
   }, []);
 
   return (
@@ -69,9 +80,16 @@ const App = () => {
       <Fragment>
       <Routes>
       <Route path="*" element={<ErrorPage />} />
-      <Route path='/' element={<Login/>}/>
-      <Route path='/invitacion/:token/confirmacion/:numeroInvitados' element={<Confirmacion/>}/>
+      <Route path='/login' element={<SignInForm/>}/>
+      <Route path='/invitacion/:token/confirmacion/:nInvitados' element={<Confirmacion/>}/>
+      <Route path='admin/*' element={<AdminLayout/>}>
+        <Route index element={<PanelInicio />} />
+        <Route path='confirmaciones' element={<Confirmaciones />} />
+        <Route path='invitaciones' element={<ErrorPage />} />
+        <Route path='algomas' element={<ErrorPage />} />
+      </Route>
       </Routes>
+      <Loading/>  
       </Fragment>
       </LocalizationProvider>
       </ThemeProvider>

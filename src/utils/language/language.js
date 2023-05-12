@@ -109,7 +109,64 @@ i18n
             numeroGuest: '# invitados',
             alerta: 'Muchas gracias por confirmar su confirmación',
             alertaError: 'Esta invitación ya fue confirmada'
-        }
+        },
+        tablaConfirmaciones:{
+          nombreInvitadoLabel: 'Nombre Invitado',
+          asistenciaLabel: 'Asistencia',
+          SI: 'Si',
+          NO: 'No',
+          MAYBE: 'Talvez',
+          numeroInvitadosLabel: 'Numero Invitados',
+          botonEditLabel: 'Editar',
+          botonDeleteLabel: 'Eliminar',
+          actions: 'Acciones',
+          fechaConfirmacion: 'Fecha Confirmacion'
+        },
+        login:{
+          title: 'Inicio Sesión',
+          emailLabel: 'Correo Electronico',
+          passwordLabel: 'Contraseña',
+          signInButton: 'Iniciar Sesión',
+          backButton:'Regresar',
+          errorMessageAlreadyInUse:'No se pudo crear el usuario, el correo ya existe.',
+          errorMessageFieldsEmpty:'No debe haber campos vacios',
+          errorMessageNoUser: 'No se encontro ningun usuario con ese correo',
+          errorMessageEmailPassword: 'El correo o la contraseña no validos, por favor intente de nuevo',
+          errorMessageError: 'Ha ocurrido un error al registrarse',
+          errorMessagePassword: 'La contraseña no validos, por favor intente de nuevo',
+          errorMessagePasswordNoMatch: 'Las contraseñas no coninciden, por favor intente de nuevo',
+          forgotPasswordButton:'Olvidó su contraseña?',
+          errorMessageInvalidEmail: 'El email no es correcto',
+          recover:{
+            title:'Recuperar Contraseña',
+            emailLabel: 'Correo Electronico',
+            recoverButton: 'Enviar Email de Recuperación',
+            backButton:'Regresar',
+            errorMessageFieldsEmpty:'No debe haber campos vacios',
+            successMessage: 'El correo se ha enviado'
+          },
+          signUp:{
+            title:'Regsitrate',
+            firstNameLabel:'Nombre',
+            lastNameLabel:'Apellido',
+            emailLabel:'Correo Electronico',
+            passwordLabel:'Contraseña',
+            confirmPasswordLabel:'Confirmar Contraseña',
+            signUpButton:'Registrarme'
+          },
+        },
+        profileMenu: {
+          profile: {
+            title:'Perfil de',
+            description:'This is a profile page. Easy to modify, always blazing fast',
+            allTeamLabel: 'See all {{number}} teams',
+            captainLabel:'Captain',
+            adminLabel: 'Admin',
+            userLabel: 'User',
+            playerLabel: 'Player',
+            arbitroLabel: 'Referee'
+          },
+        },
         }
       },
       en: {
@@ -190,7 +247,64 @@ i18n
           numeroGuest: 'Number of Guests',
           alerta: 'Thank you very much for your confirmation',
           alertaError:'This invitation is already confirmed'
-      }
+        },
+      tablaConfirmaciones:{
+        nombreInvitadoLabel: 'Nombre Invitado',
+        asistenciaLabel: 'Asistencia',
+        SI: 'Yes',
+          NO: 'No',
+          MAYBE: 'Maybe',
+        numeroInvitadosLabel: 'Numero Invitados',
+        botonEditLabel: 'Editar',
+        botonDeleteLabel: 'Eliminar',
+        actions: 'Actions',
+        fechaConfirmacion: 'Confirmation Date'
+        },
+        login:{
+          title: 'Sign In',
+          emailLabel: 'Email Address',
+          passwordLabel: 'Password',
+          signInButton: 'Log In',
+          backButton:'Back Home',
+          errorMessageError: 'User creation encountered an error',
+          errorMessagePasswordNoMatch:'Passwords do not match, please try again.',
+          errorMessageAlreadyInUse:'Cannot create user, email already in use',
+          errorMessageEmailPassword: 'Invalid email or password, please try again.',
+          errorMessageFieldsEmpty:'No empty fields',
+          errorMessageNoUser: 'No user found with this email address',
+          errorMessagePassword: 'Invalid password, please try again.',
+          forgotPasswordButton:'Forgot password?',
+          errorMessageInvalidEmail: 'Invalid email, please try again.',
+          recover:{
+            title:'Forgot Password',
+            emailLabel: 'Email Address',
+            recoverButton: 'Send Email',
+            backButton:'Back',
+            errorMessageFieldsEmpty:'No empty fields',
+            successMessage: 'Mail has been sent successfully'
+          },
+          signUp:{
+            title:'Sign Up',
+            firstNameLabel:'First Name',
+            lastNameLabel:'Last Name',
+            emailLabel:'Email Address',
+            passwordLabel:'Password',
+            confirmPasswordLabel:'Confirm Password',
+            signUpButton:'Sign Up'
+          },
+        },
+        profileMenu: {
+          profile: {
+            title:'Profile for',
+            description:'This is a profile page. Easy to modify, always blazing fast',
+            allTeamLabel: 'See all {{number}} teams',
+            captainLabel:'Captain',
+            adminLabel: 'Admin',
+            userLabel: 'User',
+            playerLabel: 'Player',
+            arbitroLabel: 'Referee'
+          },
+        },
         }
       },
     }

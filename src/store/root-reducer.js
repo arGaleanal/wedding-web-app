@@ -6,12 +6,13 @@ import { loadingReducer } from './loading/loading.reducer';
 // import { jugadoresReducer } from './jugador/jugador.reducer';
 // import { matchReducer } from './match/match.reducer';
 import { utilsReducer } from './utils/utils.reducer';
-
+import { confirmacionReducer } from './confirmaciones/confirmacion.reducer';
 //import { categoriesReducer } from './categories/category.reducer';
 //import { cartReducer } from './cart/cart.reducer';
 
 export const rootReducer = combineReducers({
   user: userReducer,
   loading: loadingReducer,
-  utils: utilsReducer
+  utils: utilsReducer,
+  confirmacion: confirmacionReducer
 });

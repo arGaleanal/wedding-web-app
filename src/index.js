@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './components/App';
+import App from './routes/App';
 import reportWebVitals from './reportWebVitals';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ root.render(
   <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
+        <NavigateSetter/>
         <App />
         </BrowserRouter>
         {/* <RouterProvider router={router} /> */}
