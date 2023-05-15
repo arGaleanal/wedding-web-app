@@ -3,18 +3,18 @@ import {Container,Typography} from '@mui/material';
 import { selectAllConfirmaciones } from '../../../store/confirmaciones/confirmacion.selector';
 
 import { useSelector } from 'react-redux';
-import TablaConfirmaciones from './jugadores-tabla';
+import TablaConfirmaciones from './confirmaciones-tabla';
 
 const Confirmaciones = () => {
   const allConfirmaciones = useSelector(selectAllConfirmaciones);
 
   return (
     <React.Fragment>
-      <Container>
+      {/* <Container> */}
         <Typography variant="h3" style={{padding:'15px'}} gutterBottom component="div" color="primary" align="center">
         </Typography>
       <TablaConfirmaciones/>
-    </Container>
+    {/* </Container> */}
       
     </React.Fragment>
         

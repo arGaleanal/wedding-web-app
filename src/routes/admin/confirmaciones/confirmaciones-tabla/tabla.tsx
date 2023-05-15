@@ -57,10 +57,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { selectAppTheme } from '../../../../store/utils/utils.selector';
 import Label from '../../../../components/Label';
+import { deleteConfirmacionStart, updateConfirmacionStart } from '../../../../store/confirmaciones/confirmacion.action';
 
 const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: any; token: string }) => {
   const { onClose, open, confirmacion, token} = props;
-  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const [showLink, setShowLink] = useState(false);
@@ -70,6 +70,14 @@ const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: an
   const [message, setMessage] = useState('');
   const [showError, setShowMessage] = useState(false);
   const [colorMessage, setColorMessage] = useState('red');
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    setIsTablet(window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches);
+  }, []);
 
   const handleClose = () => {
     setShowLink(false);
@@ -119,29 +127,25 @@ const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: an
   return (
     <Dialog onClose={handleClose} open={open}>
         <DialogTitle id="alert-dialog-title">
-          {"Create Link?"}
+          {"Create Link"}
         </DialogTitle>
       <DialogContent>
           <Box sx={{ mt: 3, maxWidth: 405 }}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={4} md={7} textAlign={{ sm: 'right' }} sx={{alignItems:'center',justifyContent:'center',display:'flex'}}>
-                  <Box pr={1}>
-                  {t('tablaConfirmaciones.numeroInvitadosLabel')}:
+                <Grid item xs={12} sx={{alignItems:'center',justifyContent:'center',display:'flex'}}>
+                  <Box pr={2}>
+                    {t('tablaConfirmaciones.numeroInvitadosLabel')}:
                   </Box>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3}>
-                <TextField
+                  <TextField
                   required
-                  
                   name='numeroInvitados'
                   type='number'
                   id="numeroInvitados"
+                  sx={{maxWidth: 60,mr:2}}
                   placeholder={'0'}
                   onChange={handleNumeroInvitados}
                   value={numeroInvitados}
-                />
-                </Grid>
-                <Grid item xs={12} sm={4} md={2} sx={{alignItems:'center',justifyContent:'center',display:'flex'}}>
+                  />
                   <Tooltip disableTouchListener disableFocusListener title="Generar link" arrow={true}>
                     <IconButton
                       onClick={handleShowLink}
@@ -149,7 +153,8 @@ const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: an
                         '&:hover': {
                           background: theme.colors.primary.lighter
                         },
-                        color: theme.palette.primary.main
+                        color: theme.palette.primary.main,
+                        mr:2
                       }}
                       color="inherit"
                       size="medium"
@@ -164,7 +169,7 @@ const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: an
                         <Typography textAlign={'center'} sx={{fontWeight:'bold'}}>Link</Typography>
                     </Grid>
                     <Grid item xs={12} textAlign={{ sm: 'left' }} sx={{alignItems:'center',display:'flex'}}>
-                        <Box sx={{fontSize:11,fontWeight:400}}>
+                        <Box sx={{fontSize:11,fontWeight:400, overflow:'hidden', marginRight: 1}}>
                           {linkInvitacion}
                         </Box>
                         <Tooltip disableTouchListener disableFocusListener title="Copy Link" arrow={true}>
@@ -191,7 +196,7 @@ const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: an
           </Box>
       </DialogContent>
       <DialogActions>
-        {showError ? <Typography variant="h6" style={{color: colorMessage, display:'flex', flexGrow:1,marginLeft:20}}>*{message}*</Typography> : <></>}
+        {showError ? <Typography variant="h6" style={{color: colorMessage, display:'flex', flexGrow:1,marginLeft:20, fontSize:'12px'}}>*{message}*</Typography> : <></>}
         <Button onClick={handleClose}>Close</Button>
       </DialogActions>
     </Dialog>
@@ -214,7 +219,7 @@ const DeleteDialog = (props: { onClose: any; open: boolean; confirmacion: any; }
   };
 
   const deleteJugador = () => {
-    // dispatch(deleteJugadorStart(jugador.id,jugador.idUser,jugador.idEquipo));
+    dispatch(deleteConfirmacionStart(confirmacion.id));
     setTimeout(()=>{ handleClose(); },800)
   }
   return (
@@ -241,11 +246,26 @@ DeleteDialog.propTypes = {
     confirmacion: PropTypes.object
 };
 
-const EditDialog = (props: { onClose: any; open: boolean; jugador: any; setEditJugador:any; updateJugador:any; }) => {
-    const { onClose, open, jugador, setEditJugador, updateJugador} = props;
-  
+const defaultFormFields = {
+  nombreInvitado: '',
+  numeroInvitados: 0,
+  asistencia: ''
+};
+
+const EditDialog = (props: { onClose: any; open: boolean; confirmacion: any; setConfirmacionEdit:any; }) => {
+    const { onClose, open, confirmacion, setConfirmacionEdit} = props;
+    const dispatch = useDispatch();
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
+    const { t, i18n } = useTranslation();
+    const [isMobile, setIsMobile] = useState(false);
+    const [isTablet, setIsTablet] = useState(false);
+    const theme = useTheme();
+  
+    useEffect(() => {
+      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+      setIsTablet(window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches);
+    }, []);
 
     useEffect(() => {
       setTimeout(()=> {
@@ -253,19 +273,30 @@ const EditDialog = (props: { onClose: any; open: boolean; jugador: any; setEditJ
       },10000)
     }, [error]);
 
+    
     const emptyFields = () => {
       let result = false;
-      if(jugador.name.length === 0){
+      if(confirmacion.nombreInvitado.length === 0){
         result = true;
       }
-      if(jugador.dorsal <= 0){
+      if(confirmacion.numeroInvitados <= 0){
         result = true;
       }
+      //asistencia
       return result;
     };
 
     const handleClose = () => {
       onClose('edit');
+    };
+
+    const handleChange = (event:any) => {
+      const { name, value } = event.target;
+      let sValue = value;
+      if ( name === "numeroInvitados"){
+          sValue = Number(sValue);
+      }
+      setConfirmacionEdit({ ...confirmacion, [name]: sValue });
     };
   
     const handleUpdate = (event: any) => {
@@ -273,29 +304,99 @@ const EditDialog = (props: { onClose: any; open: boolean; jugador: any; setEditJ
       let camposVacios = emptyFields();
       setShowError(camposVacios);
       if (camposVacios) {
-        if(jugador.name.length === 0){
+        if(confirmacion.nombreInvitado.length === 0){
           setError('El nombre del jugador no debe estar vacio');
           return;
-        } else if ( jugador.dorsal <= 0) {
+        } else if ( confirmacion.numeroInvitados <= 0) {
           setError('El numero del jugador no debe ser 0');
           return;
         }
       }
-      updateJugador();
+      console.log('handleUpdate',confirmacion)
+      dispatch(updateConfirmacionStart(confirmacion));
+      setTimeout(()=>{ handleClose(); },800);
     }
+
+    const capitalizarPrimeraLetra = (event:any) => {
+      const { name, value } = event.target;
+      if(value.length === 0){
+        return;
+      }
+      const words = value.split(' ');
+      
+      // Capitalizar la primera letra de cada palabra
+      const capitalizedWords = words.map((word:any) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(' ');
+      // let formalValue = value.charAt(0).toUpperCase() + value.slice(1);
+      setConfirmacionEdit({ ...confirmacion, [name]: capitalizedWords });
+    }
+
     return (
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog onClose={handleClose} open={open} maxWidth="xs">
           <DialogTitle id="alert-dialog-title">
-            {"Editar Jugador"}
+            {"Editar Confirmacion"}
           </DialogTitle>
         <DialogContent>
-          {/* <JugadorEditForm
-            formFieldsJugador={jugador} 
-            setFormFieldsJugador={setEditJugador} 
-            imageHandler={imageHandler}
-            profileImg={profileImg}
-            capitanSite={true}
-          /> */}
+        <Grid container spacing={2} sx={{marginTop:0}}>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" 
+                        sx={{
+                            '&.MuiInputLabel-root': {
+                                color: theme.colors.secondary.main,
+                                '&.Mui-focused' :{
+                                    color: theme.colors.primary.main,
+                                }
+                            }}}
+                    >{t('register.formAsistencia')}</InputLabel>
+                    <Select
+                    labelId="demo-simple-select-label"
+                    name="asistencia"
+                    value={confirmacion.asistencia}
+                    required
+                    label={t('register.formAsistencia')}
+                    onChange={handleChange}
+                    sx={{
+                        color: theme.colors.secondary.main,
+                        '.MuiOutlinedInput-notchedOutline': {
+                            borderColor: theme.colors.secondary.main,
+                        },
+                    }}
+                    >
+                    <MenuItem value="" disabled>
+                        <em>None</em>
+                    </MenuItem>
+                    <MenuItem key={0} value={"SI"}>{t('register.SI')}</MenuItem>
+                    <MenuItem key={1} value={"NO"}>{t('register.NO')}</MenuItem>
+                    <MenuItem key={2} value={"TALVEZ"}>{t('register.MAYBE')}</MenuItem>
+                    </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  name='numeroInvitados'
+                  type='number'
+                  id="numeroInvitados"
+                  placeholder={'0'}
+                  onChange={handleChange}
+                  value={confirmacion.numeroInvitados}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name='nombreInvitado'
+                  label={t('register.formNombreInvitado')}
+                  id="nombreInvitado"
+                  onChange={handleChange}
+                  value={confirmacion.nombreInvitado}
+                  onBlur={capitalizarPrimeraLetra}
+                />
+              </Grid>
+            </Grid>
         </DialogContent>
         <DialogActions>
           {showError ? <Typography variant="h6" style={{color: 'red',display:'flex', flexGrow:1,marginLeft:20}}>*{error}*</Typography> : <></>}
@@ -309,7 +410,7 @@ const EditDialog = (props: { onClose: any; open: boolean; jugador: any; setEditJ
 EditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    equipo: PropTypes.object
+    confirmacion: PropTypes.object
 };
 
 interface BaseTableProps {
@@ -337,11 +438,19 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   //Jugador Edit/Delete
-  const [confirmacionEdit, setConfirmacionEdit] = useState({});
+  const [confirmacionEdit, setConfirmacionEdit] = useState(defaultFormFields);
   const [token, setToken] = useState('');
 
   // Search
   const [filteredList, setFilteredList] = useState(confirmaciones);
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    setIsTablet(window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches);
+  }, []);
 
   useEffect(() => {
     setFilteredList(confirmaciones)
@@ -395,7 +504,7 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
     } else {
       setOpen(false);
     }
-    setConfirmacionEdit({})
+    setConfirmacionEdit(defaultFormFields)
   };
 
 
@@ -508,7 +617,7 @@ const camalize = (str:string) => {
   moment.locale(`${i18n.resolvedLanguage}`);
   return (
     <>
-    <Card>
+    <Card sx={{maxHeight: isMobile ? '630px':'initial'}}>
       {selectedBulkActions && (
         <Box flex={1} p={2}>
           <BulkActions />
@@ -701,16 +810,8 @@ const camalize = (str:string) => {
       </Box>
     </Card>
     <DeleteDialog open={open} onClose={()=>{handleClose('delete')}} confirmacion={confirmacionEdit}/>
-    {/* <EditDialog 
-      open={openEdit} 
-      onClose={()=>{handleClose('edit')}}
-      jugador={jugadorEdit} 
-      setEditJugador={setJugadorEdit} 
-      imageHandler={imageHandler} 
-      profileImg={profileImg}
-      updateJugador={handleUpdateJugadorUser}
-      /> */}
-      <CreateLinkDialog open={openCreate} onClose={()=>{handleClose('create')}} confirmacion={confirmacionEdit} token={token}/>
+    <EditDialog open={openEdit} onClose={()=>{handleClose('edit')}} confirmacion={confirmacionEdit} setConfirmacionEdit={setConfirmacionEdit}/>
+    <CreateLinkDialog open={openCreate} onClose={()=>{handleClose('create')}} confirmacion={confirmacionEdit} token={token}/>
     </>
   );
 };

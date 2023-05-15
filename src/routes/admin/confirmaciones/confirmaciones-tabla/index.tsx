@@ -24,17 +24,17 @@ const TablaConfirmaciones = () => {
   // const jugadoresFiltered = applyFilters(jugadores,filtroSelected)
   return (
     <>
-      <Container maxWidth="lg">
+      {/* <Container maxWidth="lg">
         <Grid
           container
           direction="row"
           spacing={3}
         >
           <Grid item xs={12}>
-            <SectionConfirmaciones confirmaciones={confirmaciones}/>
           </Grid>
         </Grid>
-      </Container>
+      </Container> */}
+      <SectionConfirmaciones confirmaciones={confirmaciones}/>
     </>
   );
 }

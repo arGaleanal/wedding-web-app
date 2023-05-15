@@ -85,10 +85,12 @@ export const createConfirmacionDocument = async (confirmacion) => {
   
   const {asistencia, numeroInvitados, nombreInvitado } = confirmacion;
   const createdAt = new Date();
-  
+  const lastModifiedAt = new Date();
+
   try {
       await setDoc(confirmacionDocRef, {
       createdAt,
+      lastModifiedAt,
       asistencia,
       numeroInvitados,
       nombreInvitado,
@@ -110,6 +112,38 @@ export const getConfirmacionesAndDocument = async () => {
   return querySnapshot.docs.map((docSnapshot) => {
     return {id: docSnapshot.id, ...docSnapshot.data()}
   });
+}
+
+export const updateConfirmacionDocument = async (confirmacion) => {
+  const confirmacionDocRef = doc(db, 'confirmaciones', confirmacion.id);
+
+  const {asistencia, numeroInvitados, nombreInvitado, createdAt } = confirmacion;
+  const lastModifiedAt = new Date();
+  try {
+      await updateDoc(confirmacionDocRef, {
+        createdAt,
+        lastModifiedAt,
+        asistencia,
+        numeroInvitados,
+        nombreInvitado
+        });
+  } catch (error) {
+      console.log('error creating the team', error.message);
+  }
+  
+  const docConfirmacionSnap = await getDoc(confirmacionDocRef);
+
+  return docConfirmacionSnap;
+};
+
+export const deleteConfirmacionDocument = async (idConfirmacion) => {
+  let deleteConfirmacion;
+  try {
+    deleteConfirmacion = await deleteDoc(doc(db, "confirmaciones", idConfirmacion));
+  } catch (error) {
+      console.log('error creating the team', error.message);
+  }
+  return deleteConfirmacion;
 }
 // =========================================================================================
 //
