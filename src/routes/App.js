@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Fragment } from 'react';
 import { Routes, Route, Navigate, useLocation} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 
 import logo from '../logo.svg';
 import '../App.css';
@@ -28,11 +28,14 @@ import Confirmacion from "./confirmacion/confirmacion.component";
 import AdminLayout from './admin';
 import PanelInicio from './admin/inicio';
 import Confirmaciones from './admin/confirmaciones';
-import { getConfirmacionesStart } from '../store/confirmaciones/confirmacion.action';
+import { setNoticacionConfirmacionStart, getNotificacionesStart} from '../store/notificaciones/notificacion.action';
 import { checkUserSession } from '../store/user/user.action';
 import {
   loadingSuccess,
 } from '../store/loading/loading.action';
+import { useAuth, db } from '../utils/firebase/firebase.utils';
+import { doc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { selectCurrentUser } from '../store/user/user.selector';
 
 // const router = createBrowserRouter([
 //   {
@@ -41,6 +44,39 @@ import {
 //     errorElement: <ErrorPage />,
 //   },
 // ]);
+
+const PrivateRoute2 = ({ children }) => {
+  let auth = useAuth();
+  let location = useLocation();
+
+  if (!auth.user) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+const PrivateAdminRoute = ( { children }) => {
+  const currentUser = useSelector(selectCurrentUser);
+  return currentUser.admin ? children : <Navigate to="/login" replace={true}/>;
+}
+
+const PrivateRoute = ( { children }) => {
+  const auth = useAuth();
+  const currentUser = useSelector(selectCurrentUser);
+  // console.log('PrivateRoute ;auth',auth);
+  // console.log('PrivateRoute ;currentUser',currentUser);
+
+  return currentUser.id ? children : <Navigate to="/login" replace={true}/>;
+}
+
+function PrivateOutlet() {
+  const auth = useAuth();
+  return auth ? <Outlet /> : <Navigate to="/login" />;
+}
 
 function App2() {
   return (
@@ -73,21 +109,50 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const q = query(collection(db, "notificaciones"),orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q,{ metadataChanges: 'hasPendingWrites' }, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            console.log("New notificaciones: ", change.doc.data());
+            //dispatch(setNoticacionConfirmacionStart({id: change.doc.id,...change.doc.data()}))
+            dispatch(getNotificacionesStart());
+        }
+        if (change.type === "modified") {
+            console.log("Modified notificaciones: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+            console.log("Removed notificaciones: ", change.doc.data());
+        }
+      });
+    });
+    // Devuelve una función de limpieza para detener la escucha de cambios
+    return () => unsubscribe();
+  }, []);
+
+  
   return (
       <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>
       <CssBaseline />
       <Fragment>
       <Routes>
+      <Route index element={<Navigate to="/login" replace />}/>
       <Route path="*" element={<ErrorPage />} />
       <Route path='/login' element={<SignInForm/>}/>
       <Route path='/invitacion/:token/confirmacion/:nInvitados' element={<Confirmacion/>}/>
-      <Route path='admin/*' element={<AdminLayout/>}>
+      <Route path="admin/*" element={<PrivateRoute><AdminLayout/></PrivateRoute>}>
         <Route index element={<PanelInicio />} />
         <Route path='confirmaciones' element={<Confirmaciones />} />
         <Route path='invitaciones' element={<ErrorPage />} />
         <Route path='algomas' element={<ErrorPage />} />
       </Route>
+      {/* <Route path='admin/*' element={<AdminLayout/>}>
+        <Route index element={<PanelInicio />} />
+        <Route path='confirmaciones' element={<Confirmaciones />} />
+        <Route path='invitaciones' element={<ErrorPage />} />
+        <Route path='algomas' element={<ErrorPage />} />
+      </Route> */}
       </Routes>
       <Loading/>  
       </Fragment>

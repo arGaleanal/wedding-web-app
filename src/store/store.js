@@ -13,7 +13,7 @@ const persistConfig = {
   key: 'root',
   storage,
   blacklist: [''],
-  whitelist: ['utils',],
+  whitelist: ['utils','user',''],
 };
 
 const sagaMiddleware = createSagaMiddleware();

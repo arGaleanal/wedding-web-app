@@ -14,7 +14,6 @@ export const confirmacionReducer = (state = INITIAL_STATE, action) => {
       return { ...state, confirmacion: state.confirmacion};
     case CONFIRMACIONES_ACTION_TYPES.GET_CONFIRMACIONES_SUCCESS:
         return { ...state, confirmaciones: payload};
-    case CONFIRMACIONES_ACTION_TYPES.CREATION_CONFIRMACIONES_FAILED:
     case CONFIRMACIONES_ACTION_TYPES.GET_CONFIRMACIONES_FAILED:
     case CONFIRMACIONES_ACTION_TYPES.UPDATE_CONFIRMACION_FAILED:
     case CONFIRMACIONES_ACTION_TYPES.DELETE_CONFIRMACION_FAILED:

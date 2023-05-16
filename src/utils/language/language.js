@@ -167,6 +167,11 @@ i18n
             arbitroLabel: 'Referee'
           },
         },
+        notificaciones:{
+          confirmacionLabel: 'ha confirmado su invitación',
+          notificacionLabel: 'Notificaciones',
+          noNotificacionLabel: 'No hay Notificaciones'
+        }
         }
       },
       en: {
@@ -305,6 +310,11 @@ i18n
             arbitroLabel: 'Referee'
           },
         },
+        notificaciones:{
+          confirmacionLabel: 'has confirmed his invitation',
+          notificacionLabel: 'Notifications',
+          noNotificacionLabel: 'None Notifications'
+        }
         }
       },
     }

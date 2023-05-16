@@ -14,6 +14,7 @@ import {
     deleteConfirmacionSuccess
 } from './confirmacion.action';
 
+import { createNotificacionStart } from '../notificaciones/notificacion.action';
 import {
     createConfirmacionDocument,
     getConfirmacionesAndDocument,
@@ -39,6 +40,7 @@ export function* createConfirmacion({  payload: { confirmacion } }) {
       console.log('confirmaiconSnapshot',confirmaiconSnapshot)
       yield all([
         put(createConfirmacionSuccess()),
+        put(createNotificacionStart(confirmacion)),
         put(loadingSuccess())
       ]);
     } catch (error) {

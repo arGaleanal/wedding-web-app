@@ -20,6 +20,9 @@ import HeaderButtons from './Buttons';
 import HeaderUserbox from './Userbox';
 import HeaderMenu from './Menu';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useSelector } from 'react-redux';
+import { selectAllConfirmaciones } from '../../store/confirmaciones/confirmacion.selector';
+import { selectNotificacionesConfirmaciones } from '../../store/notificaciones/notificacion.selector';
 
 // background-color: ${alpha(theme.colors.primary.main, 0.95)};
 const HeaderWrapper = styled(Box)(
@@ -49,6 +52,8 @@ const HeaderWrapper = styled(Box)(
 const Header = () => {
   // const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const theme = useTheme();
+  const notificaciones = useSelector(selectNotificacionesConfirmaciones);
+  const confirmaciones = useSelector(selectAllConfirmaciones);
 
   return (
     <HeaderWrapper
@@ -100,7 +105,7 @@ const Header = () => {
         {/* {<HeaderMenu />} */}
       </Stack>
       <Box display="flex" alignItems="center">
-        <HeaderButtons />
+        <HeaderButtons notificaciones={notificaciones}/>
         <HeaderUserbox />
         {/* <Box
           component="span"

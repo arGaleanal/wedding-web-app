@@ -21,6 +21,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { getConfirmacionesStart } from '../../store/confirmaciones/confirmacion.action';
+import { getNotificacionesStart } from '../../store/notificaciones/notificacion.action';
+
 import Header from '../../components/Header';
 
 interface StyledTabProps {
@@ -119,11 +121,11 @@ export default function BackToTop(props: Props) {
 
   useEffect(() => {
     dispatch(getConfirmacionesStart());
+    dispatch(getNotificacionesStart());
   }, []);
   
   useEffect(() => {
     let routName = window.location.pathname;
-    console.log('routName',routName);
     if (routName === '/admin') {
         setValue('');
         dispatch(setAdminTab(''));

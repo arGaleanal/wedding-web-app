@@ -38,7 +38,8 @@ import {
   getDocs,
   query,
   updateDoc,
-  orderBy
+  orderBy,
+  limit
 } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
@@ -144,6 +145,88 @@ export const deleteConfirmacionDocument = async (idConfirmacion) => {
       console.log('error creating the team', error.message);
   }
   return deleteConfirmacion;
+}
+
+// =========================================================================================
+// Nofificaciones
+// =========================================================================================
+export const createNotificacionDocument = async (notificacion) => {
+  if (!notificacion) return;
+
+  const notificacionDocRef = doc(collection(db, "notificaciones"));
+
+  
+  const {asistencia, numeroInvitados, nombreInvitado } = notificacion;
+  const createdAt = new Date();
+  const lastModifiedAt = new Date();
+
+  try {
+      await setDoc(notificacionDocRef,{
+        createdAt,
+        lastModifiedAt,
+        asistencia,
+        numeroInvitados,
+        nombreInvitado,
+        leida: false
+      });
+  } catch (error) {
+      console.log('error creating the notificacion', error.message);
+  }
+  const notificacionSnapshot = await getDoc(notificacionDocRef);
+
+  
+  return notificacionSnapshot;
+}
+export const getAllNotificacionesAndDocument = async () => {
+  const notificacionDocRef = collection(db, 'notificaciones');
+  const q = query(notificacionDocRef);
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => {
+    return {id: docSnapshot.id, ...docSnapshot.data()}
+  });
+}
+export const getSomeNotificacionesAndDocument = async () => {
+  const notificacionDocRef = collection(db, 'notificaciones');
+  const q = query(notificacionDocRef,orderBy("createdAt", "desc"),limit(10));
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => {
+    return {id: docSnapshot.id, ...docSnapshot.data()}
+  });
+}
+
+export const updateNotificacionDocument = async (notificacion) => {
+  const notificacionDocRef = doc(db, 'notificaciones', notificacion.id);
+
+  const {asistencia, numeroInvitados, nombreInvitado, createdAt, leida } = notificacion;
+  const lastModifiedAt = new Date();
+  try {
+      await updateDoc(notificacionDocRef, {
+        createdAt,
+        lastModifiedAt,
+        asistencia,
+        numeroInvitados,
+        nombreInvitado,
+        leida
+        });
+  } catch (error) {
+      console.log('error updating the notificacion', error.message);
+  }
+  
+  const docNotificacionSnap = await getDoc(notificacionDocRef);
+
+  return docNotificacionSnap;
+};
+
+export const deleteNotificacioDocument = async (idNotificacion) => {
+  let deleteNotificacion;
+  try {
+    deleteNotificacion = await deleteDoc(doc(db, "notificaciones", idNotificacion));
+  } catch (error) {
+      console.log('error deleting the notificacion', error.message);
+  }
+  return deleteNotificacion;
 }
 // =========================================================================================
 //
