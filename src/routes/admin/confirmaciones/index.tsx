@@ -13,6 +13,13 @@ const Confirmaciones = () => {
     numeroNoAsistentes: 0, 
     numeroTalvez:0
   });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    setIsTablet(window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches);
+  }, []);
 
   useEffect(() => {
     calcularInvitados();
@@ -51,13 +58,16 @@ const Confirmaciones = () => {
           flexWrap: 'wrap',
           '& > :not(style)': {
             m: 1,
-            width: 110,
+            mr: isMobile ? 0.5 : 1 ,
+            ml: isMobile ? 0.5 : 1 ,
+            width: isMobile ? 108 : 110,
             height: 60,
+
           },
         }}
       >
         <Paper>
-        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize:'0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
+        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize: isMobile ? '' : '0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
           Asistiran
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>
@@ -65,7 +75,7 @@ const Confirmaciones = () => {
         </Typography>
           </Paper>
         <Paper>
-        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize:'0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
+        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize: isMobile ? '' : '0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
           No Asistiran
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>
@@ -73,7 +83,7 @@ const Confirmaciones = () => {
         </Typography>
         </Paper>
         <Paper>
-        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize:'0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
+        <Typography component="h6" variant="overline" color="primary" align="center" sx={{fontSize: isMobile ? '' : '0.75rem',fontWeight:'normal', maxHeight:'25px'}}>
           Tal vez
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>

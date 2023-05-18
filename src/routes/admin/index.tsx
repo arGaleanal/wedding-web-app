@@ -28,6 +28,7 @@ import Header from '../../components/Header';
 interface StyledTabProps {
     label: string;
     icon: any;
+    disabled?: boolean;
 }
 const AntTabs = styled(Tabs)(({theme}) =>
 ({
@@ -60,6 +61,9 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
       '&.Mui-focusVisible': {
         backgroundColor: '#d1eaff',
       },
+      '&.Mui-disabled':{
+        color: alpha(theme.colors.primary.main, 0.4),
+      }
     }),
   );
 interface Props {
@@ -157,8 +161,8 @@ export default function BackToTop(props: Props) {
       <Box>
         <AntTabs value={value} onChange={handleChange} aria-label="ant example" centered>
           <AntTab icon={<PhoneIphoneIcon />} label="Confirmaciones"/>
-          <AntTab icon={<LocalPostOfficeIcon />} label="Invitaciones" />
-          <AntTab icon={<GroupAddIcon />} label="Algo mas" />
+          <AntTab disabled icon={<LocalPostOfficeIcon />} label="Invitaciones" />
+          <AntTab disabled icon={<GroupAddIcon />} label="Algo mas" />
         </AntTabs>
       </Box>
       {/* <AppBar>
