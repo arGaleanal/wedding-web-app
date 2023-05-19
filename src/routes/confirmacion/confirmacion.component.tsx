@@ -1,26 +1,36 @@
 import { FC, Fragment, JSXElementConstructor, ReactElement, ReactFragment, ReactNode, ReactPortal, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Alert from '../../components/generals/alerts/alerts.component';
 import { selectUserError } from '../../store/user/user.selector';
-import { FormControl, FormControlLabel, InputBase, InputLabel, MenuItem, Paper, Select, styled, useTheme } from '@mui/material';
+import { 
+  FormControl, 
+  FormControlLabel, 
+  InputBase, 
+  InputLabel, 
+  MenuItem, 
+  Paper, 
+  Select, 
+  styled, 
+  useTheme, 
+  Radio, 
+  RadioGroup,
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Link,
+  TextField,
+  CssBaseline,
+  Button,
+  Avatar
+} from '@mui/material';
 import DraftsIcon from '@mui/icons-material/Drafts';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import { createConfirmacionStart } from '../../store/confirmaciones/confirmacion.action';
 import _ from 'lodash';
-
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
 const CssTextField = styled(TextField)(
     ({ theme }) => `
@@ -72,6 +82,7 @@ const Confirmacion = () => {
   const { t, i18n } = useTranslation();
   const loginError = useSelector(selectUserError);
   const [aNumeroInvitados, setNumeroInvitados] = useState([1,2,3,4,5,6]);
+  const [showThanksMessage, setShowThanksMessage] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -87,10 +98,8 @@ const Confirmacion = () => {
 
   useEffect(() => {
     if(loginError){
-        if(loginError.code === "auth/email-already-in-use") {
-          alertMessage(t('login.errorMessageAlreadyInUse'),'error');
-        } else {
-          alertMessage(t('login.errorMessageError'),'error');
+        if(loginError.code.length > 0) {
+          alertMessage(t('confirmacion.errorMessageError'),'error');
         }
     }
   }, [loginError]);
@@ -112,16 +121,12 @@ const Confirmacion = () => {
     setConfirmacionFormFields(defaultFormFields);
   };
 
-  const emptyFields = () => {
-    let result = false;
-    return result;
-  };
-
-
   const checkInvitacion = (nInvitacionId:any, nInvitados:any) =>{
     console.log('nInvitacionId',nInvitacionId);
     console.log('nInvitados',nInvitados);
-
+    if(typeof nInvitados !== 'number' || isNaN(nInvitados) || Number(nInvitados) > 6) {
+      navigate('/error-page');
+    }
     // let self = this;
     // //let oInvitacion = this.props.invitacion;
     //   var docRef = database.collection("invitaciones").doc(nInvitacionId);
@@ -168,13 +173,42 @@ const Confirmacion = () => {
     }).join(' ');
     // let formalValue = value.charAt(0).toUpperCase() + value.slice(1);
     setConfirmacionFormFields({ ...confirmacionFormFields, [name]: capitalizedWords });
-  }
+  };
 
   const handleSubmit = async () => {
+    const bEmptyFields = emptyFields();
+    if(bEmptyFields) {
+      emptyFieldsMessage();
+      return;
+    }
     dispatch(createConfirmacionStart(confirmacionFormFields));
-    //resetFormFields();
-    //let capitan = (capitanSignUp === "kpitan")?true:false;
-    //dispatch(signUpStart(email, password, name+" "+lastName, name, lastName, capitan));
+    setTimeout(()=>{
+      setShowThanksMessage(true);
+    },1500);
+  };
+
+  const emptyFieldsMessage = () => {
+    if(asistencia.length === 0 || nombreInvitado.length === 0){
+      alertMessage(t('confirmacion.errorMessageFieldsEmpty'), 'error');
+      return;
+    } else if(numeroInvitados === 0){
+      alertMessage(t('confirmacion.errorMessageErrorCeroInvitados'), 'error');
+      return;
+    }
+  };
+
+  const emptyFields = () => {
+    let result = false;
+    if(asistencia.length === 0){
+      result = true;
+    }
+    if(nombreInvitado.length === 0){
+      result = true;
+    }
+    if(numeroInvitados === 0){
+      result = true;
+    }
+    return result;
   };
 
   const handleClose = (event:any, reason:any) => {
@@ -211,6 +245,21 @@ const Confirmacion = () => {
             marginRight: isMobile ? '0px' :'60px',
           }}
         >
+          {showThanksMessage ? 
+          <>
+          <Avatar sx={{ mt: 4, background: 'none', width: 65, height: 65 }}>
+            <TaskAltIcon sx={{color:`${theme.colors.primary.main}`,fontSize: '70px'}}/>
+          </Avatar>
+          <Box sx={{ mt: 2 }}>
+              <Box sx={{ p: 3, display:'flex', justifyContent:'center', alignContent:'center'}}>
+              <Typography component="h1" variant="h5" color="primary" align='center' sx={{fontSize: '18px'}}>
+                {t('confirmacion.messageConfirmacion')}
+              </Typography>
+              </Box>
+          </Box>
+          </>
+          :
+          <>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main', width: 65, height: 65 }}>
             <DraftsIcon fontSize='large' color="primary"/>
           </Avatar>
@@ -300,6 +349,8 @@ const Confirmacion = () => {
               {t('register.confirm')}
             </Button>
           </Box>
+          </>
+          }
         </Paper>
         <Alert open={open} handleClose={handleClose} message={messageAlert} type={messageType}/>
       </Container>

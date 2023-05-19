@@ -156,6 +156,12 @@ i18n
             signUpButton:'Registrarme'
           },
         },
+        confirmacion: {
+          errorMessageFieldsEmpty:'No debe haber campos vacios',
+          errorMessageError: 'Ha ocurrido un error al confirmar su invitación',
+          errorMessageErrorCeroInvitados: 'No se puede confirmar 0 invitados',
+          messageConfirmacion: 'Muchas gracias por su confirmación, los esperamos ahí!'
+        },
         profileMenu: {
           profile: {
             title:'Perfil de',
@@ -172,6 +178,10 @@ i18n
           confirmacionLabel: 'ha confirmado su invitación',
           notificacionLabel: 'Notificaciones',
           noNotificacionLabel: 'No hay Notificaciones'
+        },
+        errorPage:{
+          title:'404 Oops!',
+          subtitle:'Lo lamentamos ha ocurrido un error inesperado'
         }
         }
       },
@@ -300,6 +310,12 @@ i18n
             signUpButton:'Sign Up'
           },
         },
+        confirmacion: {
+          errorMessageFieldsEmpty: 'No empty fields',
+          errorMessageError: 'An error occurred while trying to confirm your invitation',
+          errorMessageErrorCeroInvitados: 'Cannot confirm his invitation with 0 guests user',
+          messageConfirmacion: 'Thanks for confirm your attendance, see you there!'
+        },
         profileMenu: {
           profile: {
             title:'Profile for',
@@ -316,6 +332,10 @@ i18n
           confirmacionLabel: 'has confirmed his invitation',
           notificacionLabel: 'Notifications',
           noNotificacionLabel: 'None Notifications'
+        },
+        errorPage:{
+          title:'404 Oops!',
+          subtitle:'Sorry, an unexpected error has occurred'
         }
         }
       },
