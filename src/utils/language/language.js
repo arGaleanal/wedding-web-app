@@ -120,7 +120,8 @@ i18n
           botonEditLabel: 'Editar',
           botonDeleteLabel: 'Eliminar',
           actions: 'Acciones',
-          fechaConfirmacion: 'Fecha Confirmacion'
+          fechaConfirmacion: 'Fecha Confirmacion',
+          searchLabel: 'Buscar por nombre, numero de invitados o asistencia'
         },
         login:{
           title: 'Inicio Sesión',
@@ -254,16 +255,17 @@ i18n
           alertaError:'This invitation is already confirmed'
         },
       tablaConfirmaciones:{
-        nombreInvitadoLabel: 'Nombre Invitado',
-        asistenciaLabel: 'Asistencia',
+        nombreInvitadoLabel: 'Name of guest',
+        asistenciaLabel: 'Attendence',
         SI: 'Yes',
           NO: 'No',
           MAYBE: 'Maybe',
-        numeroInvitadosLabel: 'Numero Invitados',
-        botonEditLabel: 'Editar',
-        botonDeleteLabel: 'Eliminar',
+        numeroInvitadosLabel: 'Number of guests',
+        botonEditLabel: 'Edit',
+        botonDeleteLabel: 'Delete',
         actions: 'Actions',
-        fechaConfirmacion: 'Confirmation Date'
+        fechaConfirmacion: 'Confirmation Date',
+        searchLabel: 'Search by name, number of guests or attendence'
         },
         login:{
           title: 'Sign In',

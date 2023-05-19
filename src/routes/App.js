@@ -36,6 +36,7 @@ import {
 import { useAuth, db } from '../utils/firebase/firebase.utils';
 import { doc, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { selectCurrentUser } from '../store/user/user.selector';
+import { getConfirmacionesStart } from '../store/confirmaciones/confirmacion.action';
 
 // const router = createBrowserRouter([
 //   {
@@ -117,6 +118,7 @@ const App = () => {
             console.log("New notificaciones: ", change.doc.data());
             //dispatch(setNoticacionConfirmacionStart({id: change.doc.id,...change.doc.data()}))
             dispatch(getNotificacionesStart());
+            dispatch(getConfirmacionesStart());
         }
         if (change.type === "modified") {
             console.log("Modified notificaciones: ", change.doc.data());

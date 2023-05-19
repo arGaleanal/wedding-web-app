@@ -111,7 +111,25 @@ function HeaderNotifications( props : { notificaciones: any }) {
       }
     });
     setNotificaciones(updatedData);
-  }
+  };
+
+  const handleNotificationHover = (notificacion: any) => {
+    if (notificacion.leida) return;
+    setNotificaciones((prevNotifications) =>
+      prevNotifications.map((item) => {
+        dispatch(updateNotificacionStart({ ...item, leida: true }))
+        return item.id === notificacion.id ? { ...item, leida: true } : item
+      }
+      )
+    );
+
+    setTimeout(() => {
+      setNotificaciones((prevNotifications) =>
+        prevNotifications.filter((item) => item.id !== notificacion.id)
+      );
+      
+    }, 2500);
+  };
 
   moment.locale(`${i18n.resolvedLanguage}`);
   return (
@@ -161,10 +179,11 @@ function HeaderNotifications( props : { notificaciones: any }) {
           {
             notificaciones.map((notificacion:any, index: number) => {
             return(
-              <ListItem key={index} onClick={() => { changeNotificacionRead(notificacion)}}
+              <ListItem key={index}
+                //onClick={() => { changeNotificacionRead(notificacion)}}             
                 sx={{ p: '5px', minWidth: 350, display: { xs: 'block', sm: 'flex' }}}
               >
-                <ListItemButton>
+                <ListItemButton onMouseEnter={() => handleNotificationHover(notificacion)}>
                 <Box flex="1">
                   <Box display="flex" justifyContent="space-between">
                     <Typography sx={{ fontWeight: 'bold'}}>

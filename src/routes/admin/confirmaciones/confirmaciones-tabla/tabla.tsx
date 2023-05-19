@@ -459,9 +459,14 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
   const requestSearch = (searched:string) => {
 
     if(searched.length > 0){
-      const filteredRows = filteredList.filter((row) => {
-        return row.nombreInvitado.toLowerCase().includes(searched.toLowerCase());
-      });
+      // const filteredRows = filteredList.filter((row) => {
+      //   return row.nombreInvitado.toLowerCase().includes(searched.toLowerCase());
+      // });
+      const filteredRows = filteredList.filter((item) =>
+      item.nombreInvitado.toLowerCase().includes(searched.toLowerCase()) ||
+      item.numeroInvitados.toString().includes(searched) ||
+      (item.asistencia && item.asistencia.toLowerCase().includes(searched.toLowerCase()))
+    );
       setFilteredList(filteredRows);
     } else {
       setFilteredList(confirmaciones);
@@ -632,7 +637,7 @@ const camalize = (str:string) => {
                 size="small"
                 fullWidth
                 id="outlined-adornment-password"
-                placeholder="Search by name"
+                placeholder={`${t('tablaConfirmaciones.searchLabel')}`}
                 onChange={handleChangeSearch}
                 startAdornment={
                   <InputAdornment position="start">

@@ -8,11 +8,9 @@ import { ConfirmacionesArray } from './confirmaciones-tabla/confirmaciones_types
 
 const Confirmaciones = () => {
   const allConfirmaciones: ConfirmacionesArray[] = useSelector(selectAllConfirmaciones);
-  const [state, setState ] = useState({
-    numeroAsistentes:0, 
-    numeroNoAsistentes: 0, 
-    numeroTalvez:0
-  });
+  const [sumSiAsistiran, setSumSiAsistiran] = useState(0);
+  const [sumNoAsistiran, setSumNoAsistiran] = useState(0);
+  const [sumTalvezAsistiran, setSumTalvezAsistiran] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -22,30 +20,44 @@ const Confirmaciones = () => {
   }, []);
 
   useEffect(() => {
-    calcularInvitados();
+    let sumSi = 0;
+    let sumNo = 0;
+    let sumTalvez = 0;
+
+    allConfirmaciones.forEach((confirmation) => {
+      if (confirmation.asistencia === 'SI') {
+        sumSi += confirmation.numeroInvitados;
+      } else if (confirmation.asistencia === 'NO') {
+        sumNo += confirmation.numeroInvitados;
+      } else if (confirmation.asistencia === 'TALVEZ') {
+        sumTalvez += confirmation.numeroInvitados;
+      }
+    });
+    setSumSiAsistiran(sumSi);
+    setSumNoAsistiran(sumNo);
+    setSumTalvezAsistiran(sumTalvez);
   }, [allConfirmaciones]);
   
-  const calcularInvitados = () => {
-    let nAsistentes = state.numeroAsistentes;
-    let nNoAsistentes = state.numeroNoAsistentes;
-    let nTalvez = state.numeroTalvez;
+  // const calcularInvitados = () => {
+  //   let nAsistentes = state.numeroAsistentes;
+  //   let nNoAsistentes = state.numeroNoAsistentes;
+  //   let nTalvez = state.numeroTalvez;
     
-    allConfirmaciones.forEach( (oInvitado: any) => {
-      if(oInvitado.asistencia === "SI"){
-        nAsistentes = nAsistentes + oInvitado.numeroInvitados;
-      } else if (oInvitado.asistencia === "NO"){
-        nNoAsistentes = nNoAsistentes + oInvitado.numeroInvitados;
-      } else if (oInvitado.asistencia === "TALVEZ"){
-        nTalvez = nTalvez + oInvitado.numeroInvitados;
-      }
-    })
-    setState({
-      numeroAsistentes: nAsistentes,
-      numeroNoAsistentes: nNoAsistentes,
-      numeroTalvez: nTalvez
-    })
-
-  }
+  //   allConfirmaciones.map( (oInvitado: any) => {
+  //     if(oInvitado.asistencia === "SI"){
+  //       nAsistentes = nAsistentes + oInvitado.numeroInvitados;
+  //     } else if (oInvitado.asistencia === "NO"){
+  //       nNoAsistentes = nNoAsistentes + oInvitado.numeroInvitados;
+  //     } else if (oInvitado.asistencia === "TALVEZ"){
+  //       nTalvez = nTalvez + oInvitado.numeroInvitados;
+  //     }
+  //   })
+  //   setState({
+  //     numeroAsistentes: nAsistentes,
+  //     numeroNoAsistentes: nNoAsistentes,
+  //     numeroTalvez: nTalvez
+  //   });
+  // }
   return (
     <React.Fragment>
       {/* <Container> */}
@@ -71,7 +83,7 @@ const Confirmaciones = () => {
           Asistiran
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>
-          {state.numeroAsistentes}
+          {sumSiAsistiran}
         </Typography>
           </Paper>
         <Paper>
@@ -79,7 +91,7 @@ const Confirmaciones = () => {
           No Asistiran
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>
-          {state.numeroNoAsistentes}
+          {sumNoAsistiran}
         </Typography>
         </Paper>
         <Paper>
@@ -87,7 +99,7 @@ const Confirmaciones = () => {
           Tal vez
         </Typography>
         <Typography variant="overline" color="primary" align="center" style={{marginBottom:5,fontWeight: 'bolder', display: 'flex', justifyContent: 'center', maxHeight:'30px'}}>
-          {state.numeroTalvez}
+          {sumTalvezAsistiran}
         </Typography>
         </Paper>
       </Box>
