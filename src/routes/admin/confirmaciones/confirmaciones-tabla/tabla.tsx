@@ -58,6 +58,7 @@ import { useNavigate } from 'react-router-dom';
 import { selectAppTheme } from '../../../../store/utils/utils.selector';
 import Label from '../../../../components/Label';
 import { deleteConfirmacionStart, updateConfirmacionStart } from '../../../../store/confirmaciones/confirmacion.action';
+import { selectAllConfirmaciones } from '../../../../store/confirmaciones/confirmacion.selector';
 
 const CreateLinkDialog = (props: { onClose: any; open: boolean; confirmacion: any; token: string }) => {
   const { onClose, open, confirmacion, token} = props;
@@ -443,7 +444,16 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
 
   // Search
   const [filteredList, setFilteredList] = useState(confirmaciones);
+  const allConfirmaciones: ConfirmacionesArray[] = useSelector(selectAllConfirmaciones);
+  const [busqueda, setBusqueda] = useState('');
 
+  // Pagination
+  const [selectedConfirmacionesArray, setSelectedConfirmacionesArray] = useState<string[]>([]);
+  const selectedBulkActions = selectedConfirmacionesArray.length > 0;
+  const [page, setPage] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(5);
+
+  // Match Media
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -469,10 +479,27 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
     );
       setFilteredList(filteredRows);
     } else {
-      setFilteredList(confirmaciones);
-    }
-    
-  }
+      setFilteredList(allConfirmaciones);
+    } 
+  };
+
+  const filtrarConfirmaciones = (confirmacion:any) => {
+    const { nombreInvitado, numeroInvitados, asistencia } = confirmacion;
+    const busquedaLowerCase = busqueda.toLowerCase();
+
+    return (
+      nombreInvitado.toLowerCase().includes(busquedaLowerCase) ||
+      numeroInvitados.toString().includes(busquedaLowerCase) ||
+      asistencia.toLowerCase().includes(busquedaLowerCase)
+    );
+  };
+
+  const handleChangeSearch = ( event : ChangeEvent<HTMLInputElement>): void => {
+    const {value} = event.target;
+    setBusqueda(value);
+    // requestSearch(value);
+  };
+
   const generateToken = (length: number) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let token = '';
@@ -512,19 +539,6 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
     setConfirmacionEdit(defaultFormFields)
   };
 
-
-  const [selectedConfirmacionesArray, setSelectedConfirmacionesArray] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedConfirmacionesArray.length > 0;
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-
-
-  const handleChangeSearch = ( event : ChangeEvent<HTMLInputElement>): void => {
-    const {value} = event.target;
-    requestSearch(value);
-  }
   const handleSelectAllConfirmacionesArray = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
@@ -580,33 +594,18 @@ const BaseTable: FC<BaseTableProps> = ({ confirmaciones }) => {
   
     return <Label color={color}>{text}</Label>;
   };
-// ========================= Jugador Edit ===============================================
+// ========================= Confirmacion Edit ===============================================
 
 const camalize = (str:string) => {
   return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
 };
 
-// const updateJugadorProfile = async (urlImage:string) => {
-//   if(jugadorEdit.image.length === 0){
-//     jugadorEdit.image = urlImage;
-//   }
-//   try {
-//     dispatch(updateJugadorStart(jugadorEdit));
-//     setTimeout(()=>{ 
-//       handleClose('edit');
-//       setJugadorEdit({image:'',name:'',dorsal:0});
-//     },1800)
-// } catch( error ) {
-//     console.log('error',error)
-// }
-// }
-
-
 // ======================================================================================
 
   //const filteredJugadoresArray = filteredList;
+  const confirmacionesFiltradas = filteredList.filter(filtrarConfirmaciones);
   const paginatedConfirmacionesArray = applyPagination(
-    filteredList,
+    confirmacionesFiltradas,
     page,
     limit
   );

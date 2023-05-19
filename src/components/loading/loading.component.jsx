@@ -4,17 +4,25 @@ import { useSelector,useDispatch } from 'react-redux';
 // import { signOutUser } from '../../utils/firebase/firebase.utils';
 import { selectIsLoading } from '../../store/loading/loading.selector';
 import PropTypes from 'prop-types';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import {
+  Box,
+  alpha,
+  Dialog,
+  lighten,
+  Divider,
+  IconButton,
+  CircularProgress,
+  styled,
+  useTheme,
+  Typography
+} from '@mui/material';
 import { AjaxModal, AjaxModalContent } from './loading.styles';
-import Dialog from '@mui/material/Dialog';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 function CircularProgressWithLabel(props) {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" {...props} />
+      <CircularProgress variant="determinate" {...props} color="primary"/>
       <Box
         sx={{
           top: 0,
@@ -71,7 +79,17 @@ const theme = createTheme({
     }
   },
 });
-
+const DialogWrapper = styled(Dialog)(
+  ({ theme }) => (
+    ({ theme }) => `
+   
+    .MuiPaper-root {
+      background: none;
+      box-shadow: none;
+      border: none;
+    }
+  `)
+);
 const CircularStatic = () => {
   const [progress, setProgress] = useState(10);
   const isLoading = useSelector(selectIsLoading);
@@ -85,16 +103,14 @@ const CircularStatic = () => {
     };
   }, []);
   let modalDiv = (
-    <ThemeProvider theme={theme}>
-    <Dialog sx={{background:'none'}} open={true}>
+    <DialogWrapper open={true}>
         <AjaxModalContent>
             <center>
                 {/* <CircularProgressWithLabel value={""} />; */}
-                <CircularProgress style={{color:'red'}}/>
+                <CircularProgress color="primary"/>
             </center>
         </AjaxModalContent>
-    </Dialog>
-    </ThemeProvider>
+    </DialogWrapper>
   );
 
   const loadingModal = (isLoading) ? modalDiv  :  <div/>;
