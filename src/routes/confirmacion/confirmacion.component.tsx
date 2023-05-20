@@ -124,7 +124,7 @@ const Confirmacion = () => {
   const checkInvitacion = (nInvitacionId:any, nInvitados:any) =>{
     console.log('nInvitacionId',nInvitacionId);
     console.log('nInvitados',nInvitados);
-    if(typeof nInvitados !== 'number' || isNaN(nInvitados) || Number(nInvitados) > 6) {
+    if(typeof Number(nInvitados) !== 'number' || isNaN(nInvitados) || Number(nInvitados) > 6) {
       navigate('/error-page');
     }
     // let self = this;
