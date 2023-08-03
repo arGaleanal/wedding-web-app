@@ -685,6 +685,7 @@ const camalize = (str:string) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
+                  disabled
                   checked={selectedAllConfirmacionesArray}
                   indeterminate={selectedSomeConfirmacionesArray}
                   onChange={handleSelectAllConfirmacionesArray}
@@ -712,6 +713,7 @@ const camalize = (str:string) => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
+                      disabled
                       color="primary"
                       checked={isConfirmacionArraySelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>

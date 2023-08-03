@@ -135,7 +135,7 @@ function HeaderNotifications( props : { notificaciones: any }) {
   return (
     <>
       <Tooltip arrow title="Notifications">
-        <IconButton color="secondary" ref={ref} onClick={handleOpen}>
+        <IconButton color="primary" ref={ref} onClick={handleOpen}>
           <NotificationsBadge
             badgeContent={aNotificaciones.length}
             anchorOrigin={{

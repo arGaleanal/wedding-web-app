@@ -56,7 +56,7 @@ const UserBoxText = styled(Box)(
 const UserBoxLabel = styled(Typography)(
   ({ theme }) => ({
     fontWeight: theme.typography.fontWeightBold,
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
     display: 'block',
     ...( theme.palette.mode === "dark" && {
       color: '#CBCCD2'
@@ -66,7 +66,7 @@ const UserBoxLabel = styled(Typography)(
 
 const UserBoxDescription = styled(Typography)(
   ({ theme }) => `
-        color: ${theme.palette.secondary.light}
+        color: ${theme.palette.primary.light}
 `
 );
 //lighten(theme.palette.secondary.main, 0.8)
@@ -112,7 +112,7 @@ function HeaderUserbox() {
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} color="primary" />
         </Hidden>
       </UserBoxButton>
       <Popover
@@ -139,7 +139,7 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button onClick={()=>{}}>
+          <ListItem button onClick={()=>{}} disabled>
             <AccountBoxTwoToneIcon fontSize="medium" />
             <ListItemText primary="My Profile" />
           </ListItem>
@@ -147,7 +147,7 @@ function HeaderUserbox() {
             <InboxTwoToneIcon fontSize="small" />
             <ListItemText primary="Messenger" />
           </ListItem>} */}
-          <ListItem button onClick={()=>{}}>
+          <ListItem button onClick={()=>{}} disabled>
             <SettingsApplicationsIcon fontSize="medium" />
             <ListItemText primary="Account Settings" />
           </ListItem>

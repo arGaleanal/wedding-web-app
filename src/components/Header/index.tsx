@@ -48,7 +48,7 @@ const HeaderWrapper = styled(Box)(
 
 })
 );
-
+const logoImage = require('../../utils/images/wedding-app.png');
 const Header = () => {
   // const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const theme = useTheme();
@@ -75,12 +75,14 @@ const Header = () => {
               )}`
       }}
     >
-      <AdbIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 1 }} />
+      {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 1 }} /> */}
+      <img src={logoImage} style={{width:'45px', height:'45px'}}/>
       <Typography
         variant="h5"
         noWrap
         component="a"
         href=""
+        color={"primary"}
         sx={{
           mr: 2,
           ml: 2,
@@ -89,11 +91,10 @@ const Header = () => {
           fontFamily: 'monospace',
           fontWeight: 700,
           letterSpacing: '.3rem',
-          color: 'inherit',
-          textDecoration: 'none',
+          textDecoration: 'none'
         }}
       >
-        Gestionador Invitaciones
+        Wedding App
       </Typography>
       <Stack
         direction="row"
