@@ -32,7 +32,7 @@ const HeaderWrapper = styled(Box)(
     padding: theme.spacing(0, 2),
     right: 0,
     zIndex: 6,
-    backgroundColor: theme.colors.primary.main,//alpha(theme.colors.alpha.white[100], 0.95),
+    backgroundColor: '#F5F4F2',
     backdropFilter: 'blur(3px)',
     position: 'static',
     minHeight: '79px',
