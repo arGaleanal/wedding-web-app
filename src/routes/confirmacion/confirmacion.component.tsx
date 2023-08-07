@@ -25,12 +25,58 @@ import {
   TextField,
   CssBaseline,
   Button,
-  Avatar
+  Avatar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@mui/material';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { createConfirmacionStart } from '../../store/confirmaciones/confirmacion.action';
 import _ from 'lodash';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+
+const LogoAneMiguel = require("../../utils/images/logo-ane-miguel.png");
+
+const DoubleCheckDialog = (props: any) => {
+  const { onClose, open, confirmarInvitacion } = props;
+  const { t, i18n } = useTranslation();
+
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  const handleConfirmacionInvitacion = (event:any) => {
+    event.preventDefault();
+    confirmarInvitacion();
+  };
+
+  return (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle color="primary" style={{color:'#640d0e'}} id="alert-dialog-title">{t('register.doubleCheckTitle')}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t('register.confirmLabel')}
+              </DialogContentText>
+            </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              {t('register.buttonNoDoubleCheck')}
+            </Button>
+            <Button onClick={handleConfirmacionInvitacion} color="primary" autoFocus>
+              {t('register.buttonYesDoubleCheck')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+  );
+}
 
 const CssTextField = styled(TextField)(
     ({ theme }) => `
@@ -73,6 +119,7 @@ function Copyright(props:any) {
 }
 
 const Confirmacion = () => {
+  const [openDoubleCheck, setOpenDoubleCheck] = useState(false);
   const [open, setOpen] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
   const [messageType,setMessageType] = useState("error");
@@ -181,8 +228,13 @@ const Confirmacion = () => {
       emptyFieldsMessage();
       return;
     }
+    setOpenDoubleCheck(true);
+  };
+
+  const handleConfirmarInvitacion = () => {
     dispatch(createConfirmacionStart(confirmacionFormFields));
     setTimeout(()=>{
+      setOpenDoubleCheck(false);
       setShowThanksMessage(true);
     },1500);
   };
@@ -219,6 +271,10 @@ const Confirmacion = () => {
     setOpen(false);
   };
 
+  const handleCloseDoubleCheck = () => {
+    setOpenDoubleCheck(false);
+  }
+
   const handleChange = (event:any) => {
     const { name, value } = event.target;
     let sValue = value;
@@ -247,8 +303,9 @@ const Confirmacion = () => {
         >
           {showThanksMessage ? 
           <>
-          <Avatar sx={{ mt: 4, background: 'none', width: 65, height: 65 }}>
-            <TaskAltIcon sx={{color:`${theme.colors.primary.main}`,fontSize: '70px'}}/>
+          <Avatar sx={{ mt: 4, background: 'none', width: 65, height: 65 }} src={LogoAneMiguel}>
+            {/* <TaskAltIcon sx={{color:`${theme.colors.primary.main}`,fontSize: '70px'}}/> */}
+            {/* <img/> */}
           </Avatar>
           <Box sx={{ mt: 2 }}>
               <Box sx={{ p: 3, display:'flex', justifyContent:'center', alignContent:'center'}}>
@@ -260,12 +317,14 @@ const Confirmacion = () => {
           </>
           :
           <>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main', width: 65, height: 65 }}>
-            <DraftsIcon fontSize='large' color="primary"/>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main', width: 65, height: 65 }} src={LogoAneMiguel}>
+            {/* <DraftsIcon fontSize='large' color="primary"/> */}
           </Avatar>
-          <Typography component="h1" variant="h5" color="primary">
-            {/* {t('login.signUp.title')} */}
-            Confirmacion
+          <Typography component="h1" variant="h6" color="primary" sx={{paddingBottom: 1, fontSize:'12px'}}>
+            {t('register.tilleWedding',{name:'Anelisse & Miguel'})}
+          </Typography>
+          <Typography component="h1" variant="body1" color="primary" sx={{fontSize:'16px'}}>
+            {t('register.title')}
           </Typography>
           <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -353,8 +412,10 @@ const Confirmacion = () => {
           }
         </Paper>
         <Alert open={open} handleClose={handleClose} message={messageAlert} type={messageType}/>
+        <DoubleCheckDialog open={openDoubleCheck} onClose={handleCloseDoubleCheck} confirmarInvitacion={handleConfirmarInvitacion}/>
       </Container>
   );
 }
 
 export default Confirmacion;
+

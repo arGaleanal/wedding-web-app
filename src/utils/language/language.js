@@ -91,6 +91,7 @@ i18n
               s:'Segundos'
           },
           register:{
+            title: 'Confirmación Invitación',
             asistenciaTitle: 'Confirmación de asistencia',
             formAsistencia:'Asistencia',
             asistenciaLabel: '¿Asistire o no?',
@@ -108,7 +109,11 @@ i18n
             confirm: 'Confirmar',
             numeroGuest: '# invitados',
             alerta: 'Muchas gracias por confirmar su confirmación',
-            alertaError: 'Esta invitación ya fue confirmada'
+            alertaError: 'Esta invitación ya fue confirmada',
+            buttonNoDoubleCheck: 'No',
+            buttonYesDoubleCheck: 'Si',
+            doubleCheckTitle: 'Verificación de Información',
+            tilleWedding: 'Boda de {{name}}'
         },
         tablaConfirmaciones:{
           nombreInvitadoLabel: 'Nombre Invitado',
@@ -244,6 +249,7 @@ i18n
             s:'Seconds'
         },
         register:{
+          title: 'RSVP',
           asistenciaTitle: 'RSVP',
           formAsistencia:'Attendance',
           asistenciaLabel: 'YES or NO?',
@@ -262,7 +268,11 @@ i18n
           confirm: 'Confirm',
           numeroGuest: 'Number of Guests',
           alerta: 'Thank you very much for your confirmation',
-          alertaError:'This invitation is already confirmed'
+          alertaError:'This invitation is already confirmed',
+          buttonNoDoubleCheck: 'No',
+          buttonYesDoubleCheck: 'Yes',
+          doubleCheckTitle: 'Double Check',
+          tilleWedding: '{{name}} Wedding'
         },
       tablaConfirmaciones:{
         nombreInvitadoLabel: 'Name of guest',

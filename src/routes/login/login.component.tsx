@@ -27,7 +27,7 @@ function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="">
         Wedding App
       </Link>{' '}
       {new Date().getFullYear()}
@@ -41,6 +41,8 @@ const defaultFormFields = {
   email: '',
   password: '',
 };
+
+const LogoApp = require("../../utils/images/wedding-app-fill.png");
 
 const SignInForm = () => {
 const { t, i18n } = useTranslation();
@@ -170,8 +172,8 @@ const resetFormFields = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} src={LogoApp}>
+            {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
             {t('login.title')}
