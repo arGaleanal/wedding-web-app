@@ -621,7 +621,7 @@ const camalize = (str:string) => {
   moment.locale(`${i18n.resolvedLanguage}`);
   return (
     <>
-    <Card sx={{maxHeight: isMobile ? '630px':'initial'}}>
+    <Card>
       {selectedBulkActions && (
         <Box flex={1} p={2}>
           <BulkActions />
@@ -678,7 +678,7 @@ const camalize = (str:string) => {
         ></CardHeader>
       )}
       <Divider />
-      <TableContainer>
+      <TableContainer sx={{maxHeight: isMobile ? '630px':'initial'}}>
         <Table>
           <TableHead>
             <TableRow>

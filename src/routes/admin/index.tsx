@@ -1,5 +1,5 @@
 import { FC, useState, ReactNode, useEffect, Fragment } from 'react';
-import { Box, alpha, lighten, useTheme, Container, Fab, Fade,Typography, AppBar, Toolbar,CssBaseline,useScrollTrigger, Tabs, Tab, styled } from '@mui/material';
+import { Box, alpha, lighten, useTheme, Container, Fab, Fade,Typography, AppBar, Toolbar,CssBaseline,useScrollTrigger, Tabs, Tab, styled, Link } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import { useSelector,useDispatch } from 'react-redux';
@@ -24,6 +24,20 @@ import { getConfirmacionesStart } from '../../store/confirmaciones/confirmacion.
 import { getNotificacionesStart } from '../../store/notificaciones/notificacion.action';
 
 import Header from '../../components/Header';
+import Footer from '../../components/footer/footer.component';
+
+function Copyright(props: any) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="">
+        Wedding App
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 interface StyledTabProps {
     label: string;
@@ -178,6 +192,8 @@ export default function BackToTop(props: Props) {
             <Outlet />
         </Box>
       </Container>
+      <Footer/>
+     
       {/* <ScrollTop {...props}>
         <Fab size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
